@@ -17,12 +17,12 @@ if(!process.env.FASTLY_KEY) throw new Error('The FASTLY_KEY is required, nothing
 
 
 if(!process.env.corpName) throw new Error('The corpName is required, nothing has been found in the .env');
-if(!process.env.siteName) throw new Error('The siteName is required, nothing has been found in the .env');
+if(!process.env.siteShortName) throw new Error('The siteShortName is required, nothing has been found in the .env');
 if(!process.env.fastlySID) throw new Error('The fastlySID is required, nothing has been found in the .env');
 
 
 const corpName = process.env.corpName;
-const siteName = process.env.siteName;
+const siteShortName = process.env.siteShortName;
 const fastlySID = process.env.fastlySID;
 
 
@@ -75,11 +75,11 @@ const fastlySID = process.env.fastlySID;
  */
 myEmitter.on('edgeSecurityServiceCreation', async () => {
 
-    const wantsToContinue = await askQuestion(`\nYou are about to create a WAF edge deployement, for corpName : ${corpName} and siteName ${siteName}  continue ? [Y/N]`);
+    const wantsToContinue = await askQuestion(`\nYou are about to create a WAF edge deployement, for corpName : ${corpName} and siteShortName ${siteShortName}  continue ? [Y/N]`);
 
     if(wantsToContinue && wantsToContinue.toLowerCase() === "n") process.exit();
 
-    const edgeSecurityServiceCreation = await createEdgeSecurityService(corpName, siteName);
+    const edgeSecurityServiceCreation = await createEdgeSecurityService(corpName, siteShortName);
 
     if(typeof edgeSecurityServiceCreation !== "object") throw new Error('Unfortunetly the edgeSecurityServiceCreation failed');
     
@@ -99,8 +99,8 @@ myEmitter.on('edgeSecurityServiceCreation', async () => {
  */
 myEmitter.on('getGetSecurityService', async () => {
 
-    console.log(`Getting security service for ${corpName} and siteName ${siteName}`);
-    const securityServ = await getGetSecurityService(corpName, siteName);
+    console.log(`Getting security service for ${corpName} and siteShortName ${siteShortName}`);
+    const securityServ = await getGetSecurityService(corpName, siteShortName);
     console.log(securityServ);
 
     process.exit();
@@ -120,11 +120,11 @@ myEmitter.on('getGetSecurityService', async () => {
 */
 myEmitter.on('mapEdgeSecurityServiceToFastly', async () => {
 
-    const wantsToContinue = await askQuestion(`\nYou are about to mapEdgeSecurityServiceToFastly, for corpName : ${corpName}, siteName ${siteName} and fastlySID ${fastlySID} continue ? [Y/N]`);
+    const wantsToContinue = await askQuestion(`\nYou are about to mapEdgeSecurityServiceToFastly, for corpName : ${corpName}, siteShortName ${siteShortName} and fastlySID ${fastlySID} continue ? [Y/N]`);
 
     if(wantsToContinue && wantsToContinue.toLowerCase() === "n") process.exit();
 
-    const mapingResult = await mapEdgeSecurityServiceToFastly(corpName,siteName, fastlySID);
+    const mapingResult = await mapEdgeSecurityServiceToFastly(corpName,siteShortName, fastlySID);
 
     console.log(mapingResult);
 

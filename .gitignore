@@ -4,7 +4,7 @@ node_modules/
 *.log
 variables.env
 variables.env.now
-.env
+*.env
 
 # Editor directories and files
 .idea
@@ -15,3 +15,4 @@ variables.env.now
 .sass-cache 
 
 # Project specific
+
