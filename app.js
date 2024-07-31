@@ -138,8 +138,6 @@ myEmitter.on('mapEdgeSecurityServiceToFastly', async () => {
 
     } while (statusCode !== 200);
 
-    // const mapingResult = await mapEdgeSecurityServiceToFastly(corpName,siteShortName, fastlySID);
-
     console.log(`\n\n mapEdgeSecurityServiceToFastly worked ✅ 🎉 \n\n`);
     console.log(mapingResult.data);
     console.log("Good Bye 👋");
