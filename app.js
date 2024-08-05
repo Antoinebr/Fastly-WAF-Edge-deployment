@@ -4,7 +4,7 @@ dotenv.config();
 const EventEmitter = require('events');
 const myEmitter = new EventEmitter();
 
-const {createEdgeSecurityService,getGetSecurityService,mapEdgeSecurityServiceToFastly} = require('./edgeService');
+const {createEdgeSecurityService,getGetSecurityService,mapEdgeSecurityServiceToFastly,removeEdgeDeployment,detachEdgeDeploymentService} = require('./edgeService');
 
 const {askQuestion} = require('./askQuestion');
 
@@ -42,6 +42,10 @@ const fastlySID = process.env.fastlySID;
 
     🔗 : mapEdgeSecurityServiceToFastly - [3]
 
+    💥 : detachEdgeDeploymentService - [4]
+
+    ❌ : removeEdgeDeployment - [5]
+
     -----------------------------------------------------
     `);
 
@@ -50,7 +54,7 @@ const fastlySID = process.env.fastlySID;
 
     const optionChosenAsInt = parseInt(optionChosen);
 
-    if(optionChosenAsInt <= 0 || optionChosenAsInt > 3){
+    if(optionChosenAsInt <= 0 || optionChosenAsInt >5){
         console.log('❌ Invalid option... Bye bye...');
         process.exit();
     } 
@@ -60,13 +64,14 @@ const fastlySID = process.env.fastlySID;
     if(optionChosenAsInt === 2) myEmitter.emit('getGetSecurityService');
 
     if(optionChosenAsInt === 3) myEmitter.emit('mapEdgeSecurityServiceToFastly');
+
+    if(optionChosenAsInt === 4) myEmitter.emit('detachEdgeDeploymentService');
+
+    if(optionChosenAsInt === 5) myEmitter.emit('removeEdgeDeployment');
     
     
 
 })();
-
-
-
 
 /**
  * 
@@ -88,10 +93,6 @@ myEmitter.on('edgeSecurityServiceCreation', async () => {
     
 });
 
-
-
-
-
 /**
  * 
  *  GET getGetSecurityService 🔒
@@ -100,18 +101,34 @@ myEmitter.on('edgeSecurityServiceCreation', async () => {
 myEmitter.on('getGetSecurityService', async () => {
 
     console.log(`Getting security service for ${corpName} and siteShortName ${siteShortName}`);
-    const securityServ = await getGetSecurityService(corpName, siteShortName);
-    console.log(securityServ);
+
+    try {
+        const securityServ = await getGetSecurityService(corpName, siteShortName);
+
+        if(securityServ.status === 200 ) console.log( `\n\n mapEdgeSecurityServiceToFastly worked ✅ 🎉  \n\n ${JSON.stringify(securityServ.data)} \n\n`);
+   
+    } catch (error) {
+        if (error.response) {
+            // The request was made and the server responded with a status code that falls out of the range of 2xx
+            if (error.response.status === 404) {
+                console.error(`No SecurityService found, did you create one?`);
+                return;
+            }
+            console.error(`Error: ${error.response.status} - ${error.response.statusText}`);
+            return;
+        }
+        if (error.request) {
+            // The request was made but no response was received
+            console.error('No response received:', error.request);
+            return;
+        }
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error', error.message);
+    }
 
     process.exit();
 
 });
-
-
-
-
-
-
 
 /*
 *
@@ -140,6 +157,52 @@ myEmitter.on('mapEdgeSecurityServiceToFastly', async () => {
 
     console.log(`\n\n mapEdgeSecurityServiceToFastly worked ✅ 🎉 \n\n`);
     console.log(mapingResult.data);
+    console.log("Good Bye 👋");
+    process.exit();
+
+});
+
+/*
+*
+* 
+*
+*/
+myEmitter.on('detachEdgeDeploymentService', async () => {
+
+    const wantsToContinue = await askQuestion(`\nYou are about to detachEdgeDeploymentService, for corpName : ${corpName}, siteShortName ${siteShortName} and fastlySID ${fastlySID} continue ? [Y/N]`);
+
+    if(wantsToContinue && wantsToContinue.toLowerCase() === "n") process.exit();
+
+    console.log(`Detaching EdgeDeploymentService....`);
+    const detachResult = await detachEdgeDeploymentService(corpName,siteShortName,fastlySID).catch( e => console.error(e));
+    if(detachResult.status !== 200)  throw new Error('Unfortunetly the detachEdgeDeploymentService failed');
+
+    console.log(`\n\n detachEdgeDeploymentService worked ✅ 🎉 \n\n`);
+    console.log(detachResult.data);
+    console.log("Good Bye 👋");
+    process.exit();
+
+});
+
+/*
+*
+* 
+*
+*/
+myEmitter.on('removeEdgeDeployment', async () => {
+
+    const wantsToContinue = await askQuestion(`\nYou are about to removeEdgeDeployment, for corpName : ${corpName}, siteShortName ${siteShortName} and fastlySID ${fastlySID} continue ? [Y/N]`);
+
+    if(wantsToContinue && wantsToContinue.toLowerCase() === "n") process.exit();
+
+    console.log(`Removing the EdgeDeployment....`);
+
+    const removeResult = await removeEdgeDeployment(corpName, siteShortName);
+    if(removeResult.status !== 204 && removeResult.status !== 200)  throw new Error('Unfortunetly the removeEdgeDeployment failed');
+    console.log(`\n\n removeEdgeDeployment worked ✅ 🎉 \n\n`);
+    console.log(removeResult.data);
+
+
     console.log("Good Bye 👋");
     process.exit();
 
