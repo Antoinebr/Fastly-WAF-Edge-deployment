@@ -1,11 +1,9 @@
 const dotenv = require('dotenv');
 dotenv.config();
-
 const EventEmitter = require('events');
 const myEmitter = new EventEmitter();
-
+const {handleAxiosError} = require('./utils');
 const {createEdgeSecurityService,getGetSecurityService,mapEdgeSecurityServiceToFastly,removeEdgeDeployment,detachEdgeDeploymentService} = require('./edgeService');
-
 const {askQuestion} = require('./askQuestion');
 
 
@@ -84,7 +82,7 @@ myEmitter.on('edgeSecurityServiceCreation', async () => {
 
     if(wantsToContinue && wantsToContinue.toLowerCase() === "n") process.exit();
 
-    const edgeSecurityServiceCreation = await createEdgeSecurityService(corpName, siteShortName);
+    const edgeSecurityServiceCreation = await createEdgeSecurityService(corpName, siteShortName).catch(handleAxiosError)
 
     if(typeof edgeSecurityServiceCreation !== "object") throw new Error('Unfortunetly the edgeSecurityServiceCreation failed');
     
@@ -102,29 +100,14 @@ myEmitter.on('getGetSecurityService', async () => {
 
     console.log(`Getting security service for ${corpName} and siteShortName ${siteShortName}`);
 
-    try {
-        const securityServ = await getGetSecurityService(corpName, siteShortName);
+    const securityServ = await getGetSecurityService(corpName, siteShortName).catch(handleAxiosError);
 
-        if(securityServ.status === 200 ) console.log( `\n\n mapEdgeSecurityServiceToFastly worked ✅ 🎉  \n\n ${JSON.stringify(securityServ.data)} \n\n`);
-   
-    } catch (error) {
-        if (error.response) {
-            // The request was made and the server responded with a status code that falls out of the range of 2xx
-            if (error.response.status === 404) {
-                console.error(`No SecurityService found, did you create one?`);
-                return;
-            }
-            console.error(`Error: ${error.response.status} - ${error.response.statusText}`);
-            return;
-        }
-        if (error.request) {
-            // The request was made but no response was received
-            console.error('No response received:', error.request);
-            return;
-        }
-        // Something happened in setting up the request that triggered an Error
-        console.error('Error', error.message);
-    }
+    if(!securityServ){
+        console.log("❌ Error getGetSecurityService");
+        return;
+    } 
+
+    if(securityServ.status === 200 ) console.log( `\n\n getGetSecurityService worked ✅ 🎉  \n\n ${JSON.stringify(securityServ.data)} \n\n`);
 
     process.exit();
 
@@ -174,8 +157,8 @@ myEmitter.on('detachEdgeDeploymentService', async () => {
     if(wantsToContinue && wantsToContinue.toLowerCase() === "n") process.exit();
 
     console.log(`Detaching EdgeDeploymentService....`);
-    const detachResult = await detachEdgeDeploymentService(corpName,siteShortName,fastlySID).catch( e => console.error(e));
-    if(detachResult.status !== 200)  throw new Error('Unfortunetly the detachEdgeDeploymentService failed');
+    const detachResult = await detachEdgeDeploymentService(corpName,siteShortName,fastlySID).catch(handleAxiosError);
+    if(!detachResult)  throw new Error('Unfortunetly the detachEdgeDeploymentService failed');
 
     console.log(`\n\n detachEdgeDeploymentService worked ✅ 🎉 \n\n`);
     console.log(detachResult.data);
@@ -197,7 +180,7 @@ myEmitter.on('removeEdgeDeployment', async () => {
 
     console.log(`Removing the EdgeDeployment....`);
 
-    const removeResult = await removeEdgeDeployment(corpName, siteShortName);
+    const removeResult = await removeEdgeDeployment(corpName, siteShortName).catch(handleAxiosError);
     if(removeResult.status !== 204 && removeResult.status !== 200)  throw new Error('Unfortunetly the removeEdgeDeployment failed');
     console.log(`\n\n removeEdgeDeployment worked ✅ 🎉 \n\n`);
     console.log(removeResult.data);
