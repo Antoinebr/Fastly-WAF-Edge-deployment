@@ -34,6 +34,10 @@ Then you should get a menu like this if the .env file has been filled correclty.
 
     🔗 : mapEdgeSecurityServiceToFastly - [3]
 
+    💥 : detachEdgeDeploymentService - [4]
+
+    ❌ : removeEdgeDeployment - [5]
+
     -----------------------------------------------------
     
 Choose an option by inputing the number, then hit enter :    
