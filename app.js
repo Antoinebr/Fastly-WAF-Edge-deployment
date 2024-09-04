@@ -126,18 +126,22 @@ myEmitter.on('mapEdgeSecurityServiceToFastly', async () => {
 
     let mapingResult;
     let statusCode;
-
+    
     do {
-        mapingResult = await mapEdgeSecurityServiceToFastly(corpName, siteShortName, fastlySID);
-        statusCode = mapingResult ? mapingResult.status : null;
-
-        if (statusCode !== 200) {
-            console.log(`Received status code ${statusCode}. Retrying in 3 seconds...`);
-            await new Promise( (resolve, reject) => setTimeout( () => resolve(), 3000 ));
+        try {
+            mapingResult = await mapEdgeSecurityServiceToFastly(corpName, siteShortName, fastlySID);
+            statusCode = mapingResult ? mapingResult.status : null;
+        } catch (error) {
+            if (error.response) {
+                console.log(`Received status code ${error.response.status} - ${error.response.statusText}. Retrying in 3 seconds... Be patient ! 🙂`);
+                await new Promise(resolve => setTimeout(resolve, 3000)); // Wait before retrying
+            } else {
+                console.error(`Error: ${error.message}. Retrying in 3 seconds...`);
+                await new Promise(resolve => setTimeout(resolve, 3000)); // Wait before retrying
+            }
         }
-
     } while (statusCode !== 200);
-
+    
     console.log(`\n\n mapEdgeSecurityServiceToFastly worked ✅ 🎉 \n\n`);
     console.log(mapingResult.data);
     console.log("Good Bye 👋");

@@ -2,6 +2,9 @@
 
 This CLI tool streamlines the deployment and management of Fastly's Web Application Firewall (WAF) at the edge. It provides a simple and efficient interface to perform key tasks such as creating edge security services, mapping them to Fastly, and managing deployments.
 
+**Video Tutorial :**
+
+[![My video](./docs_assets/image.png)](https://www.youtube.com/watch?v=fhEKAFlmCME)
 
 ## Install 
 
