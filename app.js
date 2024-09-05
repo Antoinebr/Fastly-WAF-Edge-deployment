@@ -140,6 +140,7 @@ myEmitter.on('mapEdgeSecurityServiceToFastly', async () => {
     
     do {
         try {
+            console.log(`Starting an attempt to map Edge Security Service to Fastly... please wait...`);
             mapingResult = await mapEdgeSecurityServiceToFastly(corpName, siteShortName, fastlySID);
             statusCode = mapingResult ? mapingResult.status : null;
         } catch (error) {
