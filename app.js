@@ -9,14 +9,25 @@ const {askQuestion} = require('./askQuestion');
 
 
 
-if(!process.env.SIGSCI_EMAIL) throw new Error('The SIGSCI_EMAIL is required, nothing has been found in the .env');
-if(!process.env.SIGSCI_TOKEN) throw new Error('The SIGSCI_TOKEN is required, nothing has been found in the .env');
-if(!process.env.FASTLY_KEY) throw new Error('The FASTLY_KEY is required, nothing has been found in the .env');
+/**
+ * 
+ *  Check if the environment variables are correctly set before proceeding.
+ * 
+ */
+try {
+    if(!process.env.SIGSCI_EMAIL) throw new Error('The SIGSCI_EMAIL is required, nothing has been found in the .env');
+    if(!process.env.SIGSCI_TOKEN) throw new Error('The SIGSCI_TOKEN is required, nothing has been found in the .env');
+    if(!process.env.FASTLY_KEY) throw new Error('The FASTLY_KEY is required, nothing has been found in the .env');
+    if(!process.env.corpName) throw new Error('The corpName is required, nothing has been found in the .env');
+    if(!process.env.siteShortName) throw new Error('The siteShortName is required, nothing has been found in the .env');
+    if(!process.env.fastlySID) throw new Error('The fastlySID is required, nothing has been found in the .env');
 
+} catch (error) {
+    console.error(`❌ Something went wrong 😬... \n\n Your .env file is either missing or incorrectly configured. More information can be found in the following error message: \n`);
+    console.error(error);
+    process.exit();
+}
 
-if(!process.env.corpName) throw new Error('The corpName is required, nothing has been found in the .env');
-if(!process.env.siteShortName) throw new Error('The siteShortName is required, nothing has been found in the .env');
-if(!process.env.fastlySID) throw new Error('The fastlySID is required, nothing has been found in the .env');
 
 
 const corpName = process.env.corpName;
@@ -151,7 +162,7 @@ myEmitter.on('mapEdgeSecurityServiceToFastly', async () => {
 
 /*
 *
-* 
+* detachEdgeDeploymentService ⛓️‍💥
 *
 */
 myEmitter.on('detachEdgeDeploymentService', async () => {
@@ -173,7 +184,7 @@ myEmitter.on('detachEdgeDeploymentService', async () => {
 
 /*
 *
-* 
+* removeEdgeDeployment ⌫
 *
 */
 myEmitter.on('removeEdgeDeployment', async () => {
