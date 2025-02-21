@@ -1,24 +1,14 @@
 # Fastly WAF @Edge deployement
 
-This CLI tool streamlines the deployment and management of Fastly's Web Application Firewall (WAF) at the edge. It provides a simple and efficient interface to perform key tasks such as creating edge security services, mapping them to Fastly, and managing deployments.
+This CLI tool streamlines the deployment and management of Fastly's Web Application Firewall (WAF) at the edge. It provides a simple interface to perform tasks such as creating edge security services, mapping them to Fastly, and managing deployments.
 
-**Video Tutorial :**
-
-[![My video](./docs_assets/image.png)](https://www.youtube.com/watch?v=fhEKAFlmCME)
 
 ## Install 
 
 ```
-npm install
+npx fastly-waf-edge-deployement
 ```
 
-## Setup 
-
-Copy the ```.env.sample``` and rename it ```.env``` then fill the informations with your own credentials. 
-
-```
-cp .env.sample  .env
-```
 
 ## Run 
 
@@ -26,8 +16,22 @@ cp .env.sample  .env
 npm run cli
 ```
 
-Then you should get a menu like this if the .env file has been filled correclty. 
+If you do not have a ```.env``` at ```  /Users/<yourUser>/.Fastly-WAF-Edge-deployement/.env  ```
 
+
+```.env``` example : 
+```
+SIGSCI_EMAIL="yourEmail@provider.com"
+SIGSCI_TOKEN="YOUR_SIGSCI_TOKEN_HERE"
+FASTLY_KEY="YOUR_SIGSCI_API_KEY_HERE"
+
+
+corpName = "your_corp_name_here"
+siteShortName = "your_site_short_name_here"
+fastlySID = "your_fastly_service_id_here"
+```
+
+The cli will prompt you the infos to create one.
 
 ```
     -----------------------------------------------------

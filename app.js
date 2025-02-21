@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const {checkEnv} = require('./envChecking');
 const EventEmitter = require('events');
 const myEmitter = new EventEmitter();

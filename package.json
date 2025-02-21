@@ -1,8 +1,11 @@
 {
   "name": "fastly-waf-edge-deployement",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "app": "app.js"
+  },
   "scripts": {
     "cli": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"

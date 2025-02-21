@@ -6,10 +6,6 @@ const { askQuestion } = require('./askQuestion');
 
 
 const getEnvFilePath = () => {
-    // Allow override via environment variable
-    if (process.env.YOUR_CLI_ENV_PATH) {
-        return process.env.YOUR_CLI_ENV_PATH;
-    }
 
     // Default to global config directory
     const envDir = path.join(os.homedir(), '.Fastly-WAF-Edge-deployement');
@@ -38,9 +34,9 @@ exports.checkEnv = async () => {
         await createEnvFile();
     }
 
-    console.log(`👍 .env found at /Users/antoine/.Fastly-WAF-Edge-deployement/.env \n`);
+    console.log(`👍 .env found at ${envFilePath} \n`);
 
-    dotenv.config();
+    dotenv.config({ path: envFilePath });
 
     // Check if the environment variables are correctly set before proceeding.
     try {
