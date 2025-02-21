@@ -19,6 +19,8 @@ const getEnvFilePath = () => {
     return envFilePath;
 };
 
+exports.getEnvFilePath = getEnvFilePath;
+
 
 /**
  * 

@@ -19,7 +19,7 @@ console.log(`
 
 const main = async () => {
 
-    await checkEnv();
+    
 
     console.log(`
     -----------------------------------------------------
@@ -64,6 +64,8 @@ const main = async () => {
 }
 
 (async () => {
+    
+    await checkEnv();
 
     await main();
 

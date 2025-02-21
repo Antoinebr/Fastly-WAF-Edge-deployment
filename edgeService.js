@@ -1,6 +1,8 @@
 const dotenv = require('dotenv');
-dotenv.config();
 const axios = require('axios');
+const {getEnvFilePath} = require('./envChecking');
+dotenv.config({ path: getEnvFilePath() });
+
 
 /**
  * Creates an edge security service for a given corporation and site.
@@ -38,7 +40,7 @@ exports.createEdgeSecurityService = async (corpName, siteName) => {
 exports.getGetSecurityService = async (corpName, siteName) => {
     if (!corpName) throw new Error(`A corp name is needed we received : ${typeof corpName}`);
     if (!siteName) throw new Error(`A siteName name is needed we received : ${typeof siteName}`);
-
+    
     const response = await axios({
         method: 'get',
         url: `https://dashboard.signalsciences.net/api/v0/corps/${corpName}/sites/${siteName}/edgeDeployment`,
