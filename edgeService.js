@@ -119,7 +119,7 @@ exports.detachEdgeDeploymentService = async (corpName, siteName, fastlySID) => {
 exports.removeEdgeDeployment = async (corpName, siteName) => {
     if (!corpName) throw new Error(`A corp name is needed we received: ${typeof corpName}`);
     if (!siteName) throw new Error(`A site name is needed we received: ${typeof siteName}`);
-
+    
     const response = await axios({
         method: 'delete',
         url: `https://dashboard.signalsciences.net/api/v0/corps/${corpName}/sites/${siteName}/edgeDeployment`,

@@ -10,7 +10,8 @@ const rl = readline.createInterface({
 exports.askQuestion = (question) => {
     return new Promise((resolve) => {
         rl.question(question, (answer) => {
-            resolve(answer);
+            const answerCleaned = (typeof answer === "string") ? answer.trim() : answer;
+            resolve(answerCleaned);
         });
     });
 };
