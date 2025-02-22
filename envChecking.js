@@ -32,7 +32,7 @@ exports.checkEnv = async () => {
     const envFilePath = getEnvFilePath();
 
     if (!fs.existsSync(envFilePath)) {
-        console.log('\n ❌ .env file not found. Let\'s create one! \n');
+        console.log(`\n ❌ .env file not found. in ${envFilePath} \n Let\'s create one! \n`);
         await createEnvFile();
     }
 

@@ -3,8 +3,9 @@ const {checkEnv} = require('./envChecking');
 const EventEmitter = require('events');
 const myEmitter = new EventEmitter();
 const { handleAxiosError } = require('./utils');
-const { createEdgeSecurityService, getGetSecurityService, mapEdgeSecurityServiceToFastly, removeEdgeDeployment, detachEdgeDeploymentService } = require('./edgeService');
+const { createEdgeSecurityService, getGetSecurityService, mapEdgeSecurityServiceToFastly, removeEdgeDeployment, detachEdgeDeploymentService, getEdgeSecuriytDictionary, getLatestServiceVersion, updateDictionaryItem } = require('./edgeService');
 const { askQuestion } = require('./askQuestion');
+const { error } = require('console');
 
 console.log(`
     =============================================
@@ -26,15 +27,17 @@ const main = async () => {
     Menu
     -----------------------------------------------------
 
-    🌎 : edgeSecurityServiceCreation - [1]
+    🌎 : Create an Edge Security Service - [1]
 
-    🔒 : getGetSecurityService - [2]
+    🔒 : Get and verify the creation of the Edge Security Service - [2]
 
-    🔗 : mapEdgeSecurityServiceToFastly - [3]
+    🔗 : Map the Edge Security Service to the Fastly CDN Service - [3]
 
-    💥 : detachEdgeDeploymentService - [4]
+    💯 : Set the percentage of traffic to be analyzed by the WAF  - [4]
 
-    ❌ : removeEdgeDeployment - [5]
+    💥 : detach Edge nDeployment Service - [5]
+
+    ❌ : remove Edge Deployment - [6]
 
     -----------------------------------------------------
     `);
@@ -55,9 +58,11 @@ const main = async () => {
 
     if (optionChosenAsInt === 3) myEmitter.emit('mapEdgeSecurityServiceToFastly');
 
-    if (optionChosenAsInt === 4) myEmitter.emit('detachEdgeDeploymentService');
+    if (optionChosenAsInt === 4) myEmitter.emit('editDictionaryTo100');
 
-    if (optionChosenAsInt === 5) myEmitter.emit('removeEdgeDeployment');
+    if (optionChosenAsInt === 5) myEmitter.emit('detachEdgeDeploymentService');
+
+    if (optionChosenAsInt === 6) myEmitter.emit('removeEdgeDeployment');
 
 
 
@@ -147,9 +152,39 @@ myEmitter.on('mapEdgeSecurityServiceToFastly', async () => {
 
     console.log(`\n\n mapEdgeSecurityServiceToFastly worked ✅ 🎉 \n\n`);
     console.log(mapingResult.data);
-    console.log("Good Bye 👋");
-    process.exit();
+    //console.log("Good Bye 👋");
+    //process.exit();
 
+    await main();
+});
+
+
+myEmitter.on('editDictionaryTo100', async () => { 
+
+    const percentage = await askQuestion("Choose a percentage of traffic to send to the WAF, then hit enter : ");
+
+    if(isNaN(parseInt(percentage))) throw new Error(`${percentage} is not a valid option`);
+
+    if(parseInt(percentage) > 100 || parseInt(percentage) < 0 )  throw new Error(`${percentage} is not a valid option it must be between 0 and 100`);
+
+    const latestVersion = await getLatestServiceVersion(process.env.fastlySID);
+
+    if(!latestVersion) throw new Error(`We were unable to obtain the latest version of the service ID ${process.env.fastlySID} `);
+
+    const EdgeSecurityDictionary = await getEdgeSecuriytDictionary(process.env.fastlySID, latestVersion);
+
+    if(!EdgeSecurityDictionary.id) throw new Error(`We were unable to get the EdgeSecurityDictionary id `);
+
+    const updateResult = await updateDictionaryItem(process.env.fastlySID,EdgeSecurityDictionary.id,"Enabled",percentage);
+    
+    if(parseInt(updateResult.item_value) !== parseInt(percentage) ) throw new Error(`We were unable to set the enabled value to ${percentage}`);
+
+    console.log(updateResult);
+
+    console.log(`🎉 we updated ${updateResult.dictionary_id} successfuly to ${updateResult.item_value}%`);
+
+    await main();
+    
 });
 
 /*
