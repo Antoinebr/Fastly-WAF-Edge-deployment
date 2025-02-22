@@ -58,7 +58,7 @@ const main = async () => {
 
     if (optionChosenAsInt === 3) myEmitter.emit('mapEdgeSecurityServiceToFastly');
 
-    if (optionChosenAsInt === 4) myEmitter.emit('editDictionaryTo100');
+    if (optionChosenAsInt === 4) myEmitter.emit('editDictionary');
 
     if (optionChosenAsInt === 5) myEmitter.emit('detachEdgeDeploymentService');
 
@@ -158,8 +158,12 @@ myEmitter.on('mapEdgeSecurityServiceToFastly', async () => {
     await main();
 });
 
-
-myEmitter.on('editDictionaryTo100', async () => { 
+/*
+ *
+ * editDictionary ⛓️‍💥
+ *
+ */
+myEmitter.on('editDictionary', async () => { 
 
     const percentage = await askQuestion("Choose a percentage of traffic to send to the WAF, then hit enter : ");
 

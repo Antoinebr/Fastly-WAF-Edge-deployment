@@ -36,7 +36,8 @@ exports.checkEnv = async () => {
         await createEnvFile();
     }
 
-    console.log(`👍 .env found at ${envFilePath} \n`);
+    console.log(`
+    👍 .env found at ${envFilePath} \n`);
 
     dotenv.config({ path: envFilePath });
 
@@ -63,7 +64,13 @@ exports.checkEnv = async () => {
         process.exit();
     }
 
-    console.log(`👌 .env loaded for \n \n SIGSCI_EMAIL : ${process.env.SIGSCI_EMAIL} \n corpName : ${process.env.corpName} \n siteShortName : ${process.env.siteShortName} \n fastlySID : ${process.env.fastlySID}`);
+    console.log(`
+    👌 .env loaded for :
+    
+    SIGSCI_EMAIL : ${process.env.SIGSCI_EMAIL}
+    corpName : ${process.env.corpName}
+    siteShortName : ${process.env.siteShortName}
+    fastlySID : ${process.env.fastlySID}`);
 
 
 };
