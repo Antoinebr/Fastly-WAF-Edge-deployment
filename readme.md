@@ -38,20 +38,21 @@ The cli will prompt you the infos to create one.
     Menu
     -----------------------------------------------------
 
-    🌎 : edgeSecurityServiceCreation - [1]
+    🌎 : Create an Edge Security Service - [1]
 
-    🔒 : getGetSecurityService - [2]
+    🔒 : Get and verify the creation of the Edge Security Service - [2]
 
-    🔗 : mapEdgeSecurityServiceToFastly - [3]
+    🔗 : Map the Edge Security Service to the Fastly CDN Service - [3]
 
-    💥 : detachEdgeDeploymentService - [4]
+    💯 : Set the percentage of traffic to be analyzed by the WAF  - [4]
 
-    ❌ : removeEdgeDeployment - [5]
+    💥 : detach Edge nDeployment Service - [5]
+
+    ❌ : remove Edge Deployment - [6]
 
     -----------------------------------------------------
     
 Choose an option by inputing the number, then hit enter :    
-
 
 ```
 
