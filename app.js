@@ -35,7 +35,7 @@ const main = async () => {
 
     💯 : Set the percentage of traffic to be analyzed by the WAF  - [4]
 
-    💥 : detach Edge nDeployment Service - [5]
+    💥 : detach Edge Deployment Service - [5]
 
     ❌ : remove Edge Deployment - [6]
 
@@ -63,8 +63,6 @@ const main = async () => {
     if (optionChosenAsInt === 5) myEmitter.emit('detachEdgeDeploymentService');
 
     if (optionChosenAsInt === 6) myEmitter.emit('removeEdgeDeployment');
-
-
 
 }
 
@@ -110,9 +108,10 @@ myEmitter.on('getGetSecurityService', async () => {
     if (!securityServ) {
         console.log("❌ Error getGetSecurityService");
         await main();
-    }
+    }   
 
-    if (securityServ.status === 200) console.log(`\n\n getGetSecurityService worked ✅ 🎉  \n\n ${JSON.stringify(securityServ.data)} \n\n`);
+    if (securityServ.status === 200) console.log(`\n\n getGetSecurityService worked ✅ 🎉  \n\n ${JSON.stringify(securityServ.data,null, 2)} \n\n`);
+
 
     await main();
 
@@ -160,7 +159,7 @@ myEmitter.on('mapEdgeSecurityServiceToFastly', async () => {
 
 /*
  *
- * editDictionary ⛓️‍💥
+ * editDictionary 📙
  *
  */
 myEmitter.on('editDictionary', async () => { 
@@ -193,7 +192,7 @@ myEmitter.on('editDictionary', async () => {
 
 /*
  *
- * detachEdgeDeploymentService ⛓️‍💥
+ * detachEdgeDeploymentService 💥
  *
  */
 myEmitter.on('detachEdgeDeploymentService', async () => {
@@ -215,7 +214,7 @@ myEmitter.on('detachEdgeDeploymentService', async () => {
 
 /*
  *
- * removeEdgeDeployment ⌫
+ * removeEdgeDeployment ❌
  *
  */
 myEmitter.on('removeEdgeDeployment', async () => {
