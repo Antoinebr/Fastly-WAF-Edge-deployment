@@ -1,4 +1,4 @@
-# Fastly WAF @Edge deployement
+# Fastly WAF @Edge deployment
 
 This CLI tool streamlines the deployment and management of Fastly's Web Application Firewall (WAF) at the edge. It provides a simple interface to perform tasks such as creating edge security services, mapping them to Fastly, and managing deployments.
 
@@ -6,7 +6,7 @@ This CLI tool streamlines the deployment and management of Fastly's Web Applicat
 ## Install 
 
 ```
-npx fastly-waf-edge-deployement
+npx fastly-waf-edge-deployment
 ```
 
 
@@ -16,7 +16,7 @@ npx fastly-waf-edge-deployement
 npm run cli
 ```
 
-If you do not have a ```.env``` at ```  /Users/<yourUser>/.Fastly-WAF-Edge-deployement/.env  ```
+If you do not have a ```.env``` at ```  /Users/<yourUser>/.Fastly-WAF-Edge-deployment/.env  ```
 
 
 ```.env``` example : 

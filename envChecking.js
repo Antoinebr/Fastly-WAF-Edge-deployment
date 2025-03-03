@@ -9,7 +9,7 @@ const { askQuestion } = require('./askQuestion');
 const getEnvFilePath = () => {
 
     // Default to global config directory
-    const envDir = path.join(os.homedir(), '.Fastly-WAF-Edge-deployement');
+    const envDir = path.join(os.homedir(), '.Fastly-WAF-Edge-deployment');
     const envFilePath = path.join(envDir, '.env');
 
     // Ensure the directory exists
