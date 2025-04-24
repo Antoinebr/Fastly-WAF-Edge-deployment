@@ -73,13 +73,14 @@ exports.checkEnv = async () => {
     siteShortName : ${process.env.siteShortName}
     fastlySID : ${process.env.fastlySID}`);
     
-
-    const fastlyServices = await getPaginatedServices();
     
     console.log(`
     -----------------------------------------------------
     
-    🔍 Checking the correctness of the .env value by calling Fastly APIs`);
+    🔍 Checking the correctness of the .env value by calling Fastly APIs...
+    please wait...`);
+
+    const fastlyServices = await getPaginatedServices();
 
     if(fastlyServices.status !== 200){
         console.error(`❌ \n Your FASTLY_KEY in the .env ! seems to be wrong we couldn't list your services we got ${fastlyServices.status}`);

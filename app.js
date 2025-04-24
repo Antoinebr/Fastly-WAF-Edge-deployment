@@ -3,7 +3,7 @@ const {checkEnv} = require('./envChecking');
 const EventEmitter = require('events');
 const myEmitter = new EventEmitter();
 const { handleAxiosError } = require('./utils');
-const { createEdgeSecurityService, getGetSecurityService, mapEdgeSecurityServiceToFastly, removeEdgeDeployment, detachEdgeDeploymentService, getEdgeSecuriytDictionary, getLatestServiceVersion, updateDictionaryItem } = require('./edgeService');
+const { createEdgeSecurityService, getGetSecurityService, mapEdgeSecurityServiceToFastly, removeEdgeDeployment, detachEdgeDeploymentService, getEdgeSecuriytDictionary, getLatestServiceVersion, updateDictionaryItem, enableBotManagement, resyncBackends } = require('./edgeService');
 const { askQuestion } = require('./askQuestion');
 const { error } = require('console');
 
@@ -35,9 +35,13 @@ const main = async () => {
 
     💯 : Set the percentage of traffic to be analyzed by the WAF  - [4]
 
-    💥 : detach Edge Deployment Service - [5]
+    🤖 : Enable the bot management feature  - [5]
 
-    ❌ : remove Edge Deployment - [6]
+    💥 : detach Edge Deployment Service - [6]
+
+    ❌ : remove Edge Deployment - [7]
+
+    ♻️ : resync backend - [8]
 
     -----------------------------------------------------
     `);
@@ -47,7 +51,7 @@ const main = async () => {
 
     const optionChosenAsInt = parseInt(optionChosen);
 
-    if (optionChosenAsInt <= 0 || optionChosenAsInt > 5) {
+    if (optionChosenAsInt <= 0 || optionChosenAsInt > 8) {
         console.log('❌ Invalid option... Bye bye...');
         process.exit();
     }
@@ -60,9 +64,14 @@ const main = async () => {
 
     if (optionChosenAsInt === 4) myEmitter.emit('editDictionary');
 
-    if (optionChosenAsInt === 5) myEmitter.emit('detachEdgeDeploymentService');
+    if (optionChosenAsInt === 5) myEmitter.emit('addBotManagement');
 
-    if (optionChosenAsInt === 6) myEmitter.emit('removeEdgeDeployment');
+    if (optionChosenAsInt === 6) myEmitter.emit('detachEdgeDeploymentService');
+
+    if (optionChosenAsInt === 7) myEmitter.emit('removeEdgeDeployment');
+
+    if (optionChosenAsInt === 8) myEmitter.emit('resyncBackends');
+    
 
 }
 
@@ -190,6 +199,22 @@ myEmitter.on('editDictionary', async () => {
     
 });
 
+
+myEmitter.on('addBotManagement', async () => {
+
+    const wantsToContinue = await askQuestion(`\nYou are about to enableBotManagement, for corpName : ${process.env.corpName}, siteShortName ${process.env.siteShortName} and fastlySID ${process.env.fastlySID} continue ? [Y/N]`);
+
+    if (wantsToContinue && wantsToContinue.toLowerCase() === "n") process.exit();
+
+    console.log(`Enabling Bot Management....`);
+    const enableBotManagementResponse = await enableBotManagement(process.env.corpName, process.env.siteShortName, process.env.fastlySID).catch(console.error);
+    if (!enableBotManagementResponse) throw new Error('Unfortunetly the enableBotManagement failed');
+
+    console.log(`\n\n enableBotManagement worked ✅ 🎉 \n\n`);
+    console.log(enableBotManagementResponse.data);
+    console.log("Good Bye 👋");
+    process.exit();
+});
 /*
  *
  * detachEdgeDeploymentService 💥
@@ -233,5 +258,21 @@ myEmitter.on('removeEdgeDeployment', async () => {
 
     console.log("Good Bye 👋");
     process.exit();
+
+});
+
+myEmitter.on('resyncBackends', async () => {
+
+    const wantsToContinue = await askQuestion(`\nYou are about to resyncBackends, for corpName : ${process.env.corpName}, siteShortName ${process.env.siteShortName} and process.env.fastlySID ${process.env.fastlySID} continue ? [Y/N]`);
+
+    if (wantsToContinue && wantsToContinue.toLowerCase() === "n") process.exit();
+
+    console.log(`resyncing Backends...`);
+
+    const resyncResult = await resyncBackends(process.env.corpName, process.env.siteShortName,process.env.fastlySID).catch(handleAxiosError);
+    if (resyncResult.status !== 200) throw new Error('Unfortunetly the resyncResult failed');
+    
+    console.log(`\n\n resyncResult worked ✅ 🎉 \n\n`);
+    console.log(resyncResult.data);
 
 });
