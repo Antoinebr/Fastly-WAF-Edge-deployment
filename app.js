@@ -35,13 +35,11 @@ const main = async () => {
 
     💯 : Set the percentage of traffic to be analyzed by the WAF  - [4]
 
-    🤖 : Enable the bot management feature  - [5]
+    💥 : detach Edge Deployment Service - [5]
 
-    💥 : detach Edge Deployment Service - [6]
+    ❌ : remove Edge Deployment - [6]
 
-    ❌ : remove Edge Deployment - [7]
-
-    ♻️ : resync backend - [8]
+    ♻️ : resync backend - [7]
 
     -----------------------------------------------------
     `);
@@ -64,13 +62,13 @@ const main = async () => {
 
     if (optionChosenAsInt === 4) myEmitter.emit('editDictionary');
 
-    if (optionChosenAsInt === 5) myEmitter.emit('addBotManagement');
+    //if (optionChosenAsInt === 5) myEmitter.emit('addBotManagement');
 
-    if (optionChosenAsInt === 6) myEmitter.emit('detachEdgeDeploymentService');
+    if (optionChosenAsInt === 5) myEmitter.emit('detachEdgeDeploymentService');
 
-    if (optionChosenAsInt === 7) myEmitter.emit('removeEdgeDeployment');
+    if (optionChosenAsInt === 6) myEmitter.emit('removeEdgeDeployment');
 
-    if (optionChosenAsInt === 8) myEmitter.emit('resyncBackends');
+    if (optionChosenAsInt === 7) myEmitter.emit('resyncBackends');
     
 
 }

@@ -6,11 +6,28 @@ const axios = require('axios');
 const { askQuestion } = require('./askQuestion');
 
 
+const args = process.argv.slice(2); // Skip 'node' and 'script.js'
+
+
 const getEnvFilePath = () => {
 
     // Default to global config directory
     const envDir = path.join(os.homedir(), '.Fastly-WAF-Edge-deployment');
-    const envFilePath = path.join(envDir, '.env');
+
+    let customProfile = null;
+
+    if(args.includes('--profile')){
+        customProfile = process.argv.slice(3)[0];
+
+        customProfile = customProfile.includes('.env') ? customProfile : customProfile+'.env';
+        
+        console.log(`A profile has been provided. Trying to load : ${customProfile}`);
+        
+    }
+
+    const fileToLoad = customProfile || ".env";
+
+    const envFilePath = path.join(envDir, fileToLoad);
 
     // Ensure the directory exists
     if (!fs.existsSync(envDir)) {

@@ -16,7 +16,7 @@ npx fastly-waf-edge-deployment
 npm run cli
 ```
 
-If you do not have a ```.env``` at ```  /Users/<yourUser>/.Fastly-WAF-Edge-deployment/.env  ```
+If you do not have a ```.env``` at ```/Users/<yourUser>/.Fastly-WAF-Edge-deployment/.env```
 
 
 ```.env``` example : 
@@ -46,9 +46,11 @@ The cli will prompt you the infos to create one.
 
     💯 : Set the percentage of traffic to be analyzed by the WAF  - [4]
 
-    💥 : detach Edge nDeployment Service - [5]
+    💥 : detach Edge Deployment Service - [5]
 
     ❌ : remove Edge Deployment - [6]
+
+    ♻️ : resync backend - [7]
 
     -----------------------------------------------------
     
@@ -56,3 +58,11 @@ Choose an option by inputing the number, then hit enter :
 
 ```
 
+## options 
+
+
+```
+--profile example
+```
+
+This will load the `example.env` file in `/Users/<yourUser>/.Fastly-WAF-Edge-deployment/`
