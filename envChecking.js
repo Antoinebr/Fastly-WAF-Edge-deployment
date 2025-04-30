@@ -21,7 +21,9 @@ const getEnvFilePath = () => {
 
         customProfile = customProfile.includes('.env') ? customProfile : customProfile+'.env';
         
-        console.log(`A profile has been provided. Trying to load : ${customProfile}`);
+        console.log(`
+    A profile has been provided ( --profile ) Trying to load : ${customProfile}
+        `);
         
     }
 

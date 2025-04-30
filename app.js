@@ -12,7 +12,7 @@ console.log(`
     
     🚀 Welcome to the Fastly WAF Edge Edge Deployment Script 🌍 
     
-    👨‍💻 Author: @antoinebr  
+    👨‍💻 Author: https://github.com/Antoinebr/  
     
     =============================================
 
@@ -115,6 +115,7 @@ myEmitter.on('getGetSecurityService', async () => {
     if (!securityServ) {
         console.log("❌ Error getGetSecurityService");
         await main();
+        return;
     }   
 
     if (securityServ.status === 200) console.log(`\n\n getGetSecurityService worked ✅ 🎉  \n\n ${JSON.stringify(securityServ.data,null, 2)} \n\n`);
