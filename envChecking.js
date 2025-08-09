@@ -8,16 +8,41 @@ const { askQuestion } = require('./askQuestion');
 
 const args = process.argv.slice(2); // Skip 'node' and 'script.js'
 
+// Default to global config directory
+const envDir = path.join(os.homedir(), '.Fastly-WAF-Edge-deployment');
+
+
+const showExistingEnvFiles = () => {
+     const files = fs.readdirSync(envDir);
+     if (files.length === 0) {
+        console.log(`\n❌ No existing .env files found in ${envDir}\n`);
+        return;
+    }
+    console.log(`\nWe found the following .env files in ${envDir} :  \n`);
+    console.log(`You can use the --profile option to load one of them : \n`);
+    console.log(`Available .env files: \n`);
+    files.forEach(file => {
+        if(file.endsWith('.env')) {
+            console.log(`- ${file}`);
+        }
+    });
+    console.log('\n');
+};
 
 const getEnvFilePath = () => {
 
-    // Default to global config directory
-    const envDir = path.join(os.homedir(), '.Fastly-WAF-Edge-deployment');
 
     let customProfile = null;
 
     if(args.includes('--profile')){
         customProfile = process.argv.slice(3)[0];
+
+        if(!customProfile) {
+            console.error('\n❌ No profile name provided. Please provide a profile name after --profile. \n');
+            console.log(`We found the following profile files in ${envDir} :  \n`);
+            showExistingEnvFiles();
+            process.exit(1);
+        }
 
         customProfile = customProfile.includes('.env') ? customProfile : customProfile+'.env';
         
@@ -52,8 +77,17 @@ exports.checkEnv = async () => {
     const envFilePath = getEnvFilePath();
 
     if (!fs.existsSync(envFilePath)) {
-        console.log(`\n ❌ .env file not found. in ${envFilePath} \n Let\'s create one! \n`);
-        await createEnvFile();
+        console.log(`\n ❌ .env file not found. in ${envFilePath}`);
+
+        showExistingEnvFiles();
+
+        const userWantsToContinue = await askQuestion('Would you like to continue and create a new .env file? [Y/N]');
+        if (userWantsToContinue.toLowerCase() === 'y') {
+            await createEnvFile();
+        } else {
+            console.log(`\n❌ Aborting...`);
+            process.exit(1);
+        }
     }
 
     console.log(`
@@ -153,10 +187,19 @@ const createEnvFile = async () => {
 
     const envFilePath = getEnvFilePath();
 
-    fs.writeFileSync(envFilePath, envContent);
-    console.log(`\n ✅ .env file created at ${envFilePath}`);
+    const wantsToNameProfile = await askQuestion('Would you like to name that profile ? Usefull to jump between configuration ? [Y/N]');
 
-    dotenv.config(); // Reload the .env file
+    const customEnvFileName = (wantsToNameProfile.toLowerCase() === "y") ? `${envVars.corpName}-${envVars.siteShortName}.env` : null;
+
+    const finalEnvFilePath  = customEnvFileName ? envFilePath.replace('.env',customEnvFileName) : ".env";
+
+
+    fs.writeFileSync(finalEnvFilePath, envContent);
+    console.log(`\n ✅ .env file created at ${finalEnvFilePath}`);
+
+    dotenv.config({
+        path : finalEnvFilePath
+    }); // Reload the .env file
 };
 
 /**

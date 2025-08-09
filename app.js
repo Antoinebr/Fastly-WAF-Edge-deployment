@@ -12,7 +12,8 @@ console.log(`
     
     🚀 Welcome to the Fastly WAF Edge Edge Deployment Script 🌍 
     
-    👨‍💻 Author: https://github.com/Antoinebr/  
+    💾 Code : https://github.com/Antoinebr/Fastly-WAF-Edge-deployment
+    👨‍💻 Author: https://github.com/Antoinebr
     
     =============================================
 
